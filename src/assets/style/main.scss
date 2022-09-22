@@ -1,0 +1,14 @@
+$color: pink;
+
+body {
+  p {
+    color: $color;
+  }
+
+  #imgBox {
+    // background: url('../image/nightsky.jpg');
+    background: url('../../../public/image/nightsky.jpg');
+    height: 300px;
+    width: 300px;
+  }
+}

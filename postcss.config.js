@@ -1,7 +1,7 @@
 // const postcssPresetEnv = import('postcss-preset-env');
 console.log('postcss config.js')
-export default {
+module.exports = {
   plugins: [
-    import('postcss-preset-env'),
+    require('postcss-preset-env'),
   ]
 }

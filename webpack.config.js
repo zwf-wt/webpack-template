@@ -1,7 +1,8 @@
-import path from 'path';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
-import { CleanWebpackPlugin } from 'clean-webpack-plugin';
-const __dirname = path.resolve();
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+// const __dirname = path.resolve();
 console.log('process.env.NODE_ENV = ', process.env.NODE_ENV)
 
 const config = {
@@ -13,16 +14,53 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.css$/,
-        use: ['css-loader', 'postcss-loader'],
-      }
+        test: /\.(s[ac]|c)ss$/i,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'postcss-loader',
+          'sass-loader'
+        ],
+      },
+      {
+        test: /\.(jpe?g|png|gif)$/i, // 匹配图片文件
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name][hash:8].[ext]'
+            }
+          }
+        ]
+      },
+      {
+        test: /\.(jpe?g|png|gif)$/i, // 匹配图片文件
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              name: '[name][hash:8].[ext]',
+              limit: 50 * 1024
+            }
+          }
+        ]
+      },
+      // {
+      //   loader: 'file-loader',
+      //   options: {
+      //     name: '[name][hash:8].[ext]'
+      //   }
+      // }
     ]
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: './public/index.html'
     }),
-    new CleanWebpackPlugin()
+    new CleanWebpackPlugin(),
+    new MiniCssExtractPlugin({
+      filename: '[name].[hash:8].css'
+    })
   ],
   devServer: {
     static: {
@@ -35,7 +73,7 @@ const config = {
 }
 
 // env是运行的命令
-export default (env, args) => {
+module.exports = (env, args) => {
   console.log('argv.mode = ', env, args.mode)
   return config;
 }
